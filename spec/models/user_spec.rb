@@ -25,6 +25,8 @@ describe User do
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
+  it { should respond_to(:authenticate) }
+  it { should respond_to(:remember_token) }
 
   it { should be_valid }
 
@@ -42,8 +44,6 @@ describe User do
     before { @user.password_confirmation = nil }
     it { should_not be_valid }
   end
-
-  it {should respond_to(:authenticate) }
 
   describe "with a password that's too short" do
     before { @user.password = @user.password_confirmation = "a" * 5}
@@ -120,6 +120,11 @@ describe User do
       @user.save
       @user.reload.email.should == mixed_case_email.downcase
     end
+  end
+
+  describe "remeber token" do
+    before { @user.save }
+    its(:remember_token) { should_not be_blank }
   end
 
 end
